@@ -3,6 +3,7 @@ package org.test.cts;
 import java.net.URI;
 import com.atlassian.jira.rest.client.api.JiraRestClient;
 import com.atlassian.jira.rest.client.api.JiraRestClientFactory;
+import com.atlassian.jira.rest.client.api.domain.BasicProject;
 import com.atlassian.jira.rest.client.api.domain.Issue;
 import com.atlassian.jira.rest.client.api.domain.SearchResult;
 import com.atlassian.jira.rest.client.api.domain.User;
@@ -22,26 +23,28 @@ public class Main
      
     public static void main(String[] args) throws Exception
     {
-        // Construct the JRJC client
-        System.out.println(String.format("Logging in to %s with username '%s' and password '%s'", JIRA_URL, JIRA_ADMIN_USERNAME, JIRA_ADMIN_PASSWORD));
-        JiraRestClientFactory factory = new AsynchronousJiraRestClientFactory();
-        URI uri = new URI(JIRA_URL);
-        JiraRestClient client = factory.createWithBasicHttpAuthentication(uri, JIRA_ADMIN_USERNAME, JIRA_ADMIN_PASSWORD);
-        // Invoke the JRJC Client
-        Promise<User> promise = client.getUserClient().getUser("amit");
-        User user = promise.claim();
-        Promise<SearchResult>  searchresule=client.getSearchClient().searchJql(jql);
-        SearchResult reult=  searchresule.claim();
-        Promise<Issue> promiseIssue = client.getIssueClient().getIssue("ATS-6");
-        Issue issue = promiseIssue.claim();
-         
-        // Print the result
-        System.out.println(String.format("Your admin user's email address is: %s\r\n", user.getEmailAddress()));
-         
-        // Print the result
+    	final  JiraRestClientFactory factory = new AsynchronousJiraRestClientFactory();
+    	final   URI uri = new URI(JIRA_URL);
+    	final  JiraRestClient restClient = factory.createWithBasicHttpAuthentication(uri, JIRA_ADMIN_USERNAME, JIRA_ADMIN_PASSWORD);
+    	try{
+    	final   Promise<User> promise = restClient.getUserClient().getUser("amit");
+    	final  User user = promise.claim();
+    	final  Promise<SearchResult>  searchresule=restClient.getSearchClient().searchJql(jql);
+    	final  SearchResult reult=  searchresule.claim();
+    	 System.out.println(reult);
+    	final   Promise<Issue> promiseIssue = restClient.getIssueClient().getIssue("ATS-6");
+    	
+    	final  Issue issue = promiseIssue.claim();
+    	System.out.println(issue);
+       
+        
+        for (BasicProject project : restClient.getProjectClient().getAllProjects().claim()) {
+            System.out.println(project.getKey() + ": " + project.getName());
+        }
+  
         System.out.println("some TEST-1 details " + issue.getAssignee() + "   " + issue.getSummary() + "  " + issue.getWorklogs());
-        // Done
-        System.out.println("Example complete. Now exiting.");
-        System.exit(0);
-    }
+    	}finally {
+            restClient.close();
+        }
+}
 }
