@@ -1,3 +1,4 @@
+package org.jira.rest;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -23,8 +24,6 @@ import org.apache.http.impl.client.BasicAuthCache;
 import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
-
-import com.thed.zephyr.jenkins.model.ZephyrInstance;
 
 public class RestClient {
 
