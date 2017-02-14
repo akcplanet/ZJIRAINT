@@ -38,11 +38,11 @@ public class Main
     	System.out.println(issue);
        
         
-        for (BasicProject project : restClient.getProjectClient().getAllProjects().claim()) {
+    /*    for (BasicProject project : restClient.getProjectClient().getAllProjects().claim()) {
             System.out.println(project.getKey() + ": " + project.getName());
-        }
+        }*/
   
-        System.out.println("some TEST-1 details " + issue.getAssignee() + "   " + issue.getSummary() + "  " + issue.getWorklogs());
+      /*  System.out.println("some TEST-1 details " + issue.getAssignee() + "   " + issue.getSummary() + "  " + issue.getWorklogs());*/
     	}finally {
             restClient.close();
         }
