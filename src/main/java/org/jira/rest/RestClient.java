@@ -60,10 +60,7 @@ public class RestClient {
 		createHttpClient();
 	}
 
-	public RestClient(@Nonnull ZephyrInstance zephyrServer) {
-		this(zephyrServer.getServerAddress(), zephyrServer.getUsername(), zephyrServer.getPassword());
-	}
-
+	
 	public void destroy() {
 		if (httpclient != null) {
 			try {
